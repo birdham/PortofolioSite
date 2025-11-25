@@ -9,46 +9,38 @@
 <body>
 
     <div id="game-container">
-        
-        <!-- 게임 화면 -->
         <canvas id="gameCanvas"></canvas>
 
-        <!-- 상호작용 레이어 -->
         <div id="interaction-layer">
             <div id="world-space">
-                <!-- 1. 컴퓨터 -->
                 <div class="click-zone" id="zone-computer" onclick="openModal('modal-team-project')">
                     <span class="tooltip">팀 프로젝트 (Click!)</span>
                 </div>
-                <!-- 2. 이젤 -->
                 <div class="click-zone" id="zone-easel" onclick="openModal('modal-art')">
                     <span class="tooltip">게임 아트 (Click!)</span>
                 </div>
-                <!-- 3. 책장 -->
                 <div class="click-zone" id="zone-bookshelf" onclick="openModal('modal-design')">
                     <span class="tooltip">기획서 (Click!)</span>
                 </div>
-                <!-- 4. 오락기 -->
                 <div class="click-zone" id="zone-arcade" onclick="openModal('modal-web')">
                     <span class="tooltip">웹 토이프로젝트 (Click!)</span>
                 </div>
             </div>
         </div>
 
-        <!-- UI 레이어 (좌우 배치 변경) -->
         <div id="ui-layer">
-            <!-- 왼쪽: 조작키 설명 -->
             <div class="controls-hint">
-                이동: <b>W A S D</b><br>
-                점프: <b>SPACE</b>
+                <div class="control-row">
+                    <span class="key">W</span><span class="key">A</span><span class="key">S</span><span class="key">D</span> <span>이동</span>
+                </div>
+                <div class="control-row">
+                    <span class="key wide">SPACE</span> <span>점프</span>
+                </div>
             </div>
-            
-            <!-- 오른쪽: 내 정보 버튼 -->
             <button id="btn-profile" onclick="openModal('modal-profile')">
                 내 정보 (Stats)
             </button>
         </div>
-
     </div>
 
     <!-- 팝업 모달 컨테이너 -->
@@ -56,12 +48,12 @@
         
         <!-- [내 정보 모달] -->
         <div id="modal-profile" class="modal large-modal">
-            <div class="modal-header"><h2>PLAYER STATUS</h2><button class="close-btn" onclick="closeModal('modal-profile')">X</button></div>
+            <div class="modal-header"><h2>PLAYER STATUS</h2><button class="close-btn" onclick="closeModal('modal-profile')">✕</button></div>
             <div class="modal-body rpg-style">
                 <div class="profile-container">
                     <div class="profile-left">
                         <div class="profile-img-box">
-                            <div class="img-placeholder" style="font-size:12px;">[사진]</div>
+                            <div class="img-placeholder round">[사진]</div>
                         </div>
                         <div class="basic-info">
                             <h3>개발자 OOO</h3>
@@ -70,9 +62,21 @@
                         </div>
                     </div>
                     <div class="profile-right">
-                        <p><strong>STR (Unity):</strong> <span class="bar" style="width:80%">Lv.8</span></p>
-                        <p><strong>DEX (Web):</strong> <span class="bar" style="width:60%">Lv.6</span></p>
-                        <p><strong>INT (Plan):</strong> <span class="bar" style="width:70%">Lv.7</span></p>
+                        <div class="stat-row">
+                            <span class="stat-name">STR (Unity)</span>
+                            <div class="skill-bar-container"><div class="skill-bar-fill" style="width: 85%; background: #e74c3c;"></div></div>
+                            <span class="stat-val">85%</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-name">DEX (Web)</span>
+                            <div class="skill-bar-container"><div class="skill-bar-fill" style="width: 65%; background: #2ecc71;"></div></div>
+                            <span class="stat-val">65%</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-name">INT (Plan)</span>
+                            <div class="skill-bar-container"><div class="skill-bar-fill" style="width: 75%; background: #3498db;"></div></div>
+                            <span class="stat-val">75%</span>
+                        </div>
                     </div>
                 </div>
                 <hr class="rpg-divider">
@@ -99,83 +103,172 @@
 
         <!-- [1. 팀 프로젝트 모달] -->
         <div id="modal-team-project" class="modal large-modal">
-            <div class="modal-header"><h2>Battle to Survive</h2><button class="close-btn" onclick="closeModal('modal-team-project')">X</button></div>
-            <div class="modal-body project-layout">
-                <!-- 메인 이미지 영역 (타겟) -->
-                <div class="project-showcase">
-                    <div class="img-placeholder main">Battle to Survive<br>메인 화면</div>
-                </div>
-                
-                <div class="project-meta">
-                    <div class="meta-item"><strong>👥 인원</strong> <span>4명</span></div>
-                    <div class="meta-item"><strong>📅 기간</strong> <span>3개월</span></div>
-                    <div class="meta-item"><strong>🛠️ 도구</strong> <span>Unity</span></div>
-                </div>
-                <div class="project-desc"><p>실시간 멀티플레이 서바이벌 게임입니다.</p></div>
+            <div class="modal-header"><h2>Battle to Survive</h2><button class="close-btn" onclick="closeModal('modal-team-project')">✕</button></div>
+            <div class="modal-body">
+                <div class="project-layout">
+                    <!-- ★ 왼쪽: 비주얼 영역 (이미지 + 갤러리) -->
+                    <div class="visual-side">
+                        <div class="project-showcase">
+                            <div class="img-placeholder main">Battle to Survive<br>메인 화면</div>
+                        </div>
+                        <div class="project-gallery">
+                            <div class="img-placeholder sub" onclick="viewImage(this)">메인 화면</div>
+                            <div class="img-placeholder sub" onclick="viewImage(this)">보스전</div>
+                            <div class="img-placeholder sub" onclick="viewImage(this)">로비 UI</div>
+                            <div class="img-placeholder sub" onclick="viewImage(this)">코드 구조</div>
+                        </div>
+                    </div>
 
-                <!-- 갤러리 영역 (클릭 소스) -->
-                <div class="project-gallery">
-                    <div class="img-placeholder sub" onclick="viewImage(this)">메인 화면</div>
-                    <div class="img-placeholder sub" onclick="viewImage(this)">보스전<br>스크린샷</div>
-                    <div class="img-placeholder sub" onclick="viewImage(this)">로비 UI<br>디자인</div>
-                    <div class="img-placeholder sub" onclick="viewImage(this)">코드 구조<br>다이어그램</div>
+                    <!-- ★ 오른쪽: 정보 영역 (설명 + 스펙 + 링크) -->
+                    <div class="info-side">
+                        <div class="project-tags">
+                            <span class="tag tech">#Unity</span>
+                            <span class="tag role">#메인개발</span>
+                            <span class="tag role">#팀장</span>
+                            <span class="tag feature">#멀티플레이</span>
+                        </div>
+
+                        <div class="project-desc">
+                            <p><strong>실시간 멀티플레이 서바이벌 게임</strong>입니다.<br>
+                            포톤 네트워크를 활용하여 4인 동기화를 구현했으며, 
+                            저는 메인 로직과 캐릭터 FSM 설계를 담당했습니다.</p>
+                        </div>
+
+                        <div class="project-meta-grid">
+                            <div class="meta-box">
+                                <span class="label">👥 인원</span>
+                                <span class="value">4명</span>
+                            </div>
+                            <div class="meta-box">
+                                <span class="label">📅 기간</span>
+                                <span class="value">3개월</span>
+                            </div>
+                            <div class="meta-box full">
+                                <span class="label">🛠️ 도구</span>
+                                <span class="value">Unity, Photon, C#</span>
+                            </div>
+                        </div>
+
+                        <div class="project-links">
+                            <a href="#" target="_blank" class="link-btn github">GitHub Code</a>
+                            <a href="#" target="_blank" class="link-btn notion">Notion Docs</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- [2. 게임 아트 모달] -->
         <div id="modal-art" class="modal large-modal">
-            <div class="modal-header"><h2>Pixel Art & Concept</h2><button class="close-btn" onclick="closeModal('modal-art')">X</button></div>
-            <div class="modal-body project-layout">
-                <div class="project-showcase">
-                    <div class="img-placeholder main">대표 아트워크</div>
-                </div>
-                <div class="project-meta">
-                    <div class="meta-item"><strong>🛠️ 도구</strong> <span>Aseprite</span></div>
-                </div>
-                <div class="project-desc"><p>2D 플랫포머 게임용 에셋입니다.</p></div>
-                <div class="project-gallery">
-                    <div class="img-placeholder sub" onclick="viewImage(this)">대표 아트워크</div>
-                    <div class="img-placeholder sub" onclick="viewImage(this)">Idle<br>애니메이션</div>
-                    <div class="img-placeholder sub" onclick="viewImage(this)">Run<br>애니메이션</div>
+            <div class="modal-header"><h2>Pixel Art & Concept</h2><button class="close-btn" onclick="closeModal('modal-art')">✕</button></div>
+            <div class="modal-body">
+                <div class="project-layout">
+                    <div class="visual-side">
+                        <div class="project-showcase">
+                            <div class="img-placeholder main">대표 아트워크</div>
+                        </div>
+                        <div class="project-gallery">
+                            <div class="img-placeholder sub" onclick="viewImage(this)">대표 아트워크</div>
+                            <div class="img-placeholder sub" onclick="viewImage(this)">Idle 모션</div>
+                            <div class="img-placeholder sub" onclick="viewImage(this)">Run 모션</div>
+                        </div>
+                    </div>
+                    <div class="info-side">
+                        <div class="project-tags">
+                            <span class="tag tech">#Aseprite</span>
+                            <span class="tag role">#픽셀아트</span>
+                            <span class="tag role">#캐릭터기획</span>
+                        </div>
+                        <div class="project-desc">
+                            <p>직접 캐릭터 컨셉을 기획하고 제작한 2D 에셋입니다.<br>
+                            도트 애니메이션의 프레임별 움직임을 연구했습니다.</p>
+                        </div>
+                        <div class="project-meta-grid">
+                            <div class="meta-box"><span class="label">👥 인원</span><span class="value">1명</span></div>
+                            <div class="meta-box"><span class="label">📅 기간</span><span class="value">2개월</span></div>
+                            <div class="meta-box full"><span class="label">🛠️ 도구</span><span class="value">Aseprite</span></div>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" target="_blank" class="link-btn notion">ArtStation</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- [3. 기획서 모달] -->
         <div id="modal-design" class="modal large-modal">
-            <div class="modal-header"><h2>System Design Docs</h2><button class="close-btn" onclick="closeModal('modal-design')">X</button></div>
-            <div class="modal-body project-layout">
-                <div class="project-showcase">
-                    <div class="img-placeholder main">기획서 표지</div>
-                </div>
-                <div class="project-meta">
-                    <div class="meta-item"><strong>🛠️ 도구</strong> <span>Excel</span></div>
-                </div>
-                <div class="project-desc"><p>RPG 게임 강화 시스템 기획서입니다.</p></div>
-                <div class="project-gallery">
-                    <div class="img-placeholder sub" onclick="viewImage(this)">기획서 표지</div>
-                    <div class="img-placeholder sub" onclick="viewImage(this)">UI 기획안</div>
-                    <div class="img-placeholder sub" onclick="viewImage(this)">밸런스<br>테이블</div>
+            <div class="modal-header"><h2>System Design Docs</h2><button class="close-btn" onclick="closeModal('modal-design')">✕</button></div>
+            <div class="modal-body">
+                <div class="project-layout">
+                    <div class="visual-side">
+                        <div class="project-showcase">
+                            <div class="img-placeholder main">기획서 표지</div>
+                        </div>
+                        <div class="project-gallery">
+                            <div class="img-placeholder sub" onclick="viewImage(this)">기획서 표지</div>
+                            <div class="img-placeholder sub" onclick="viewImage(this)">UI 기획안</div>
+                            <div class="img-placeholder sub" onclick="viewImage(this)">밸런스 표</div>
+                        </div>
+                    </div>
+                    <div class="info-side">
+                        <div class="project-tags">
+                            <span class="tag tech">#Excel</span>
+                            <span class="tag role">#시스템기획</span>
+                            <span class="tag feature">#역기획</span>
+                        </div>
+                        <div class="project-desc">
+                            <p>RPG 게임 강화 시스템 기획서입니다.<br>
+                            수치 밸런싱과 UI 플로우 차트를 포함하고 있습니다.</p>
+                        </div>
+                        <div class="project-meta-grid">
+                            <div class="meta-box"><span class="label">👥 인원</span><span class="value">1명</span></div>
+                            <div class="meta-box"><span class="label">📅 기간</span><span class="value">2주</span></div>
+                            <div class="meta-box full"><span class="label">🛠️ 도구</span><span class="value">Excel, PPT</span></div>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" target="_blank" class="link-btn notion">View Docs</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- [4. 웹 프로젝트 모달] -->
         <div id="modal-web" class="modal large-modal">
-            <div class="modal-header"><h2>Web Mini Games</h2><button class="close-btn" onclick="closeModal('modal-web')">X</button></div>
-            <div class="modal-body project-layout">
-                <div class="project-showcase">
-                    <div class="img-placeholder main">웹게임 실행 화면</div>
-                </div>
-                <div class="project-meta">
-                    <div class="meta-item"><strong>🛠️ 도구</strong> <span>JS, HTML</span></div>
-                </div>
-                <div class="project-desc"><p>바닐라 JS 미니 게임입니다.</p></div>
-                <div class="project-gallery">
-                    <div class="img-placeholder sub" onclick="viewImage(this)">웹게임 실행 화면</div>
-                    <div class="img-placeholder sub" onclick="viewImage(this)">테트리스<br>플레이</div>
-                    <div class="img-placeholder sub" onclick="viewImage(this)">투두리스트<br>화면</div>
+            <div class="modal-header"><h2>Web Mini Games</h2><button class="close-btn" onclick="closeModal('modal-web')">✕</button></div>
+            <div class="modal-body">
+                <div class="project-layout">
+                    <div class="visual-side">
+                        <div class="project-showcase">
+                            <div class="img-placeholder main">웹게임 실행 화면</div>
+                        </div>
+                        <div class="project-gallery">
+                            <div class="img-placeholder sub" onclick="viewImage(this)">웹게임 실행 화면</div>
+                            <div class="img-placeholder sub" onclick="viewImage(this)">테트리스</div>
+                            <div class="img-placeholder sub" onclick="viewImage(this)">투두리스트</div>
+                        </div>
+                    </div>
+                    <div class="info-side">
+                        <div class="project-tags">
+                            <span class="tag tech">#JS</span>
+                            <span class="tag role">#1인개발</span>
+                            <span class="tag feature">#Canvas</span>
+                        </div>
+                        <div class="project-desc">
+                            <p>바닐라 JS와 Canvas API로 구현한 미니 게임입니다.<br>
+                            별도의 게임 엔진 없이 순수 코드로 로직을 짰습니다.</p>
+                        </div>
+                        <div class="project-meta-grid">
+                            <div class="meta-box"><span class="label">👥 인원</span><span class="value">1명</span></div>
+                            <div class="meta-box"><span class="label">📅 기간</span><span class="value">1주</span></div>
+                            <div class="meta-box full"><span class="label">🛠️ 도구</span><span class="value">JS, HTML</span></div>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" target="_blank" class="link-btn github">GitHub</a>
+                            <a href="#" target="_blank" class="link-btn notion">Play Demo</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
