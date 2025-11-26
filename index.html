@@ -101,57 +101,48 @@
             </div>
         </div>
 
-        <!-- [1. 팀 프로젝트 모달] -->
+        <!-- [1. 팀 프로젝트 모달 - 수정됨: 이미지로 변경] -->
         <div id="modal-team-project" class="modal large-modal">
-            <div class="modal-header"><h2>Battle to Survive</h2><button class="close-btn" onclick="closeModal('modal-team-project')">✕</button></div>
+            <div class="modal-header"><h2>Pixel Adventure</h2><button class="close-btn" onclick="closeModal('modal-team-project')">✕</button></div>
             <div class="modal-body">
                 <div class="project-layout">
-                    <!-- ★ 왼쪽: 비주얼 영역 (이미지 + 갤러리) -->
                     <div class="visual-side">
                         <div class="project-showcase">
-                            <div class="img-placeholder main">Battle to Survive<br>메인 화면</div>
+                            <!-- ★ 이미지를 기본으로 보여줌 -->
+                            <img src="assets/pixel_adventure/main.png" class="img-placeholder main" alt="메인 화면" style="object-fit: contain;">
                         </div>
+                        
                         <div class="project-gallery">
-                            <div class="img-placeholder sub" onclick="viewImage(this)">메인 화면</div>
-                            <div class="img-placeholder sub" onclick="viewImage(this)">보스전</div>
-                            <div class="img-placeholder sub" onclick="viewImage(this)">로비 UI</div>
-                            <div class="img-placeholder sub" onclick="viewImage(this)">코드 구조</div>
+                            <img src="assets/pixel_adventure/main.png" class="img-placeholder sub" onclick="viewImage(this)" alt="메인">
+                            <img src="assets/pixel_adventure/boss.png" class="img-placeholder sub" onclick="viewImage(this)" alt="보스전">
+                            <img src="assets/pixel_adventure/character.png" class="img-placeholder sub" onclick="viewImage(this)" alt="캐릭터 선택창">
+                            <img src="assets/pixel_adventure/fight.png" class="img-placeholder sub" onclick="viewImage(this)" alt="전투">
                         </div>
                     </div>
 
-                    <!-- ★ 오른쪽: 정보 영역 (설명 + 스펙 + 링크) -->
                     <div class="info-side">
                         <div class="project-tags">
                             <span class="tag tech">#Unity</span>
-                            <span class="tag role">#메인개발</span>
-                            <span class="tag role">#팀장</span>
                             <span class="tag feature">#멀티플레이</span>
+                            <span class="tag role">#기획</span>
+                            <span class="tag role">#개발</span>
                         </div>
 
                         <div class="project-desc">
-                            <p><strong>실시간 멀티플레이 서바이벌 게임</strong>입니다.<br>
-                            포톤 네트워크를 활용하여 4인 동기화를 구현했으며, 
-                            저는 메인 로직과 캐릭터 FSM 설계를 담당했습니다.</p>
+                            <p><strong>Pixel Adventure</strong>는 다른 플레이어들과 협동하는 <strong>멀티 2D 플랫포머 RPG</strong>입니다.<br><br>
+                            저는 해당 프로젝트에서 <strong>8인의 플레이어 직업, 스킬</strong>을 구상 및 개발을 했습니다.</p>
                         </div>
 
                         <div class="project-meta-grid">
-                            <div class="meta-box">
-                                <span class="label">👥 인원</span>
-                                <span class="value">4명</span>
-                            </div>
-                            <div class="meta-box">
-                                <span class="label">📅 기간</span>
-                                <span class="value">3개월</span>
-                            </div>
-                            <div class="meta-box full">
-                                <span class="label">🛠️ 도구</span>
-                                <span class="value">Unity, Photon, C#</span>
-                            </div>
+                            <div class="meta-box"><span class="label">👥 인원</span><span class="value">4인</span></div>
+                            <div class="meta-box"><span class="label">📅 기간</span><span class="value">1개월</span></div>
+                            <div class="meta-box full"><span class="label">🛠️ 도구</span><span class="value">유니티, Photon, C#, Notion, Figma</span></div>
                         </div>
 
                         <div class="project-links">
-                            <a href="#" target="_blank" class="link-btn github">GitHub Code</a>
-                            <a href="#" target="_blank" class="link-btn notion">Notion Docs</a>
+                            <a href="https://www.figma.com/" target="_blank" class="link-btn figma">Figma</a>
+                            <a href="https://github.com/" target="_blank" class="link-btn github">Github</a>
+                            <a href="https://www.youtube.com/" target="_blank" class="link-btn youtube">Youtube</a>
                         </div>
                     </div>
                 </div>
@@ -179,18 +170,8 @@
                             <span class="tag role">#픽셀아트</span>
                             <span class="tag role">#캐릭터기획</span>
                         </div>
-                        <div class="project-desc">
-                            <p>직접 캐릭터 컨셉을 기획하고 제작한 2D 에셋입니다.<br>
-                            도트 애니메이션의 프레임별 움직임을 연구했습니다.</p>
-                        </div>
-                        <div class="project-meta-grid">
-                            <div class="meta-box"><span class="label">👥 인원</span><span class="value">1명</span></div>
-                            <div class="meta-box"><span class="label">📅 기간</span><span class="value">2개월</span></div>
-                            <div class="meta-box full"><span class="label">🛠️ 도구</span><span class="value">Aseprite</span></div>
-                        </div>
-                        <div class="project-links">
-                            <a href="#" target="_blank" class="link-btn notion">ArtStation</a>
-                        </div>
+                        <div class="project-desc"><p>직접 캐릭터 컨셉을 기획하고 제작한 2D 에셋입니다.</p></div>
+                        <div class="project-links"><a href="#" target="_blank" class="link-btn notion">ArtStation</a></div>
                     </div>
                 </div>
             </div>
@@ -198,36 +179,37 @@
 
         <!-- [3. 기획서 모달] -->
         <div id="modal-design" class="modal large-modal">
-            <div class="modal-header"><h2>System Design Docs</h2><button class="close-btn" onclick="closeModal('modal-design')">✕</button></div>
+            <div class="modal-header"><h2>BackpackBrawl 역기획 및 분석 제안서</h2><button class="close-btn" onclick="closeModal('modal-design')">✕</button></div>
             <div class="modal-body">
                 <div class="project-layout">
                     <div class="visual-side">
                         <div class="project-showcase">
-                            <div class="img-placeholder main">기획서 표지</div>
+                            <img src="assets/backpack_brawl/main.png" class="img-placeholder main" alt="BackpackBrawl 분석" style="object-fit: contain;">
                         </div>
                         <div class="project-gallery">
-                            <div class="img-placeholder sub" onclick="viewImage(this)">기획서 표지</div>
-                            <div class="img-placeholder sub" onclick="viewImage(this)">UI 기획안</div>
-                            <div class="img-placeholder sub" onclick="viewImage(this)">밸런스 표</div>
+                            <img src="assets/backpack_brawl/main.png" class="img-placeholder sub" onclick="viewImage(this)" alt="메인">
+                            <img src="assets/backpack_brawl/page_1.png" class="img-placeholder sub" onclick="viewImage(this)" alt="분석 1">
+                            <img src="assets/backpack_brawl/page_2.png" class="img-placeholder sub" onclick="viewImage(this)" alt="분석 2">
                         </div>
                     </div>
                     <div class="info-side">
                         <div class="project-tags">
-                            <span class="tag tech">#Excel</span>
-                            <span class="tag role">#시스템기획</span>
-                            <span class="tag feature">#역기획</span>
+                            <span class="tag role">#기획</span>
+                            <span class="tag tech">#Notion</span>
                         </div>
                         <div class="project-desc">
-                            <p>RPG 게임 강화 시스템 기획서입니다.<br>
-                            수치 밸런싱과 UI 플로우 차트를 포함하고 있습니다.</p>
+                            <p><strong>BackpackBrawl</strong>은 RapidfireGames가 만든 <strong>모바일 인벤토리 관리 자동전략 게임</strong>입니다.<br><br>
+                            이 게임의 장르가 향후 기존의 모바일게임에서 퍼즐, 방치형게임을 이은 <strong>새로운 트렌드로서 잠재력</strong>을 느꼈기에, 
+                            해당 게임을 장기간 플레이 해보고 분석하게 되었습니다.</p>
                         </div>
                         <div class="project-meta-grid">
-                            <div class="meta-box"><span class="label">👥 인원</span><span class="value">1명</span></div>
-                            <div class="meta-box"><span class="label">📅 기간</span><span class="value">2주</span></div>
-                            <div class="meta-box full"><span class="label">🛠️ 도구</span><span class="value">Excel, PPT</span></div>
+                            <div class="meta-box"><span class="label">👥 인원</span><span class="value">1인</span></div>
+                            <div class="meta-box"><span class="label">📅 기간</span><span class="value">1개월</span></div>
+                            <div class="meta-box full"><span class="label">🛠️ 도구</span><span class="value">Notion</span></div>
                         </div>
+                        
                         <div class="project-links">
-                            <a href="#" target="_blank" class="link-btn notion">View Docs</a>
+                            <a href="https://www.notion.so/teamsparta/1232dc3ef51481a7ba1cd27d75e3d1c0?v=1232dc3ef51481028552000c61248ad0" target="_blank" class="link-btn notion">Notion</a>
                         </div>
                     </div>
                 </div>
@@ -240,34 +222,19 @@
             <div class="modal-body">
                 <div class="project-layout">
                     <div class="visual-side">
-                        <div class="project-showcase">
-                            <div class="img-placeholder main">웹게임 실행 화면</div>
-                        </div>
+                        <div class="project-showcase"><div class="img-placeholder main">웹게임 실행 화면</div></div>
                         <div class="project-gallery">
                             <div class="img-placeholder sub" onclick="viewImage(this)">웹게임 실행 화면</div>
                             <div class="img-placeholder sub" onclick="viewImage(this)">테트리스</div>
-                            <div class="img-placeholder sub" onclick="viewImage(this)">투두리스트</div>
                         </div>
                     </div>
                     <div class="info-side">
                         <div class="project-tags">
                             <span class="tag tech">#JS</span>
-                            <span class="tag role">#1인개발</span>
                             <span class="tag feature">#Canvas</span>
                         </div>
-                        <div class="project-desc">
-                            <p>바닐라 JS와 Canvas API로 구현한 미니 게임입니다.<br>
-                            별도의 게임 엔진 없이 순수 코드로 로직을 짰습니다.</p>
-                        </div>
-                        <div class="project-meta-grid">
-                            <div class="meta-box"><span class="label">👥 인원</span><span class="value">1명</span></div>
-                            <div class="meta-box"><span class="label">📅 기간</span><span class="value">1주</span></div>
-                            <div class="meta-box full"><span class="label">🛠️ 도구</span><span class="value">JS, HTML</span></div>
-                        </div>
-                        <div class="project-links">
-                            <a href="#" target="_blank" class="link-btn github">GitHub</a>
-                            <a href="#" target="_blank" class="link-btn notion">Play Demo</a>
-                        </div>
+                        <div class="project-desc"><p>바닐라 JS와 Canvas API로 구현한 미니 게임입니다.</p></div>
+                        <div class="project-links"><a href="#" target="_blank" class="link-btn github">GitHub</a></div>
                     </div>
                 </div>
             </div>

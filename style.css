@@ -1,19 +1,12 @@
-/* ★ [1] 폰트 불러오기 (가장 중요!) */
-/* 본문용: Noto Sans KR (깔끔한 고딕) */
+/* ★ [1] 폰트 불러오기 */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
-/* 게임용: Galmuri11 (가독성 좋은 픽셀 폰트) */
 @import url('https://cdn.jsdelivr.net/npm/galmuri/dist/galmuri.css');
 
 /* 기본 설정 */
 body {
     background-color: #000;
     color: white;
-    /* 기본 폰트를 Noto Sans KR로 확실하게 지정 */
     font-family: 'Noto Sans KR', sans-serif;
-    /* 글자 깨짐 방지 및 부드럽게 처리 */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
     margin: 0;
     overflow: hidden;
 }
@@ -23,13 +16,10 @@ body {
     width: 100vw;
     height: 100vh;
     background-color: #222;
-    
-    /* 배경 그리드 패턴 (조금 더 은은하게 수정) */
     background-image: 
         linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
     background-size: 40px 40px;
-    
     overflow: hidden;
 }
 
@@ -46,46 +36,61 @@ canvas { display: block; width: 100%; height: 100%; }
     height: 100%;
 }
 
-/* 상호작용 영역 숨쉬기 애니메이션 */
+/* ★ [수정됨] 강렬한 형광 노랑 발광 애니메이션 */
 @keyframes zonePulse {
-    0% { border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 0 0 rgba(255, 255, 0, 0); }
-    50% { border-color: rgba(255, 255, 255, 0.5); box-shadow: 0 0 10px rgba(255, 255, 0, 0.1); }
-    100% { border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 0 0 rgba(255, 255, 0, 0); }
+    0% {
+        border-color: rgba(255, 255, 0, 0.3); /* 흐린 노랑 */
+        box-shadow: 0 0 0 rgba(255, 255, 0, 0);
+        transform: scale(1);
+    }
+    50% {
+        border-color: rgba(255, 255, 0, 1);   /* 쨍한 노랑 */
+        box-shadow: 0 0 20px rgba(255, 255, 0, 0.6), inset 0 0 10px rgba(255, 255, 0, 0.2); 
+        transform: scale(1.02); 
+    }
+    100% {
+        border-color: rgba(255, 255, 0, 0.3);
+        box-shadow: 0 0 0 rgba(255, 255, 0, 0);
+        transform: scale(1);
+    }
 }
 
 .click-zone {
     position: absolute;
-    background: rgba(255, 255, 0, 0.02);
+    background: rgba(255, 255, 0, 0.05); /* 아주 연한 노랑 배경 */
     cursor: pointer;
     pointer-events: auto;
-    border: 2px dashed rgba(255, 255, 255, 0.2);
+    border: 3px dashed rgba(255, 255, 0, 0.5); /* 테두리도 노랑 */
     border-radius: 12px;
     transition: all 0.2s ease;
-    animation: zonePulse 3s infinite ease-in-out;
+    animation: zonePulse 1.5s infinite ease-in-out; 
 }
+
+/* 마우스 올렸을 때 효과 강화 */
 .click-zone:hover { 
-    background: rgba(255, 255, 255, 0.1); 
+    background: rgba(255, 255, 0, 0.2); 
     animation: none; 
     border-color: #fff;
     border-style: solid; 
-    transform: scale(1.02); /* 호버 시 살짝 커짐 */
+    box-shadow: 0 0 30px rgba(255, 255, 0, 0.8); 
+    transform: scale(1.05);
 }
 
 .tooltip {
     display: none; position: absolute; top: -50px; left: 50%;
     transform: translateX(-50%); 
     background: rgba(20, 20, 20, 0.95);
-    color: #f1c40f; 
+    color: #ffff00; /* 텍스트도 형광 노랑 */
     padding: 8px 16px; 
     font-size: 13px;
-    /* ★ 툴팁에는 픽셀 폰트 적용 */
     font-family: 'Galmuri11', sans-serif; 
     font-weight: bold;
     white-space: nowrap; 
     border-radius: 8px;
-    border: 1px solid #444;
+    border: 1px solid #ffff00; /* 테두리도 노랑 */
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    pointer-events: none; /* 툴팁이 클릭 방해하지 않게 */
+    pointer-events: none;
+    z-index: 100;
 }
 .click-zone:hover .tooltip { display: block; animation: floatUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
@@ -125,7 +130,7 @@ canvas { display: block; width: 100%; height: 100%; }
     display: flex;
     align-items: center;
     gap: 12px; 
-    font-family: 'Galmuri11', sans-serif; /* 픽셀 폰트 */
+    font-family: 'Galmuri11', sans-serif;
     color: #ddd;
     letter-spacing: -0.5px;
 }
@@ -178,13 +183,13 @@ canvas { display: block; width: 100%; height: 100%; }
     display: none; position: fixed; top: 0; left: 0;
     width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8);
     justify-content: center; align-items: center; z-index: 1000;
-    backdrop-filter: blur(8px); /* 배경 블러 효과 강화 */
+    backdrop-filter: blur(8px);
 }
 #modal-overlay.active { display: flex; }
 
 .modal { 
     display: none; 
-    background: #1e1e1e; /* 조금 더 어두운 배경 */
+    background: #1e1e1e; 
     width: 400px; max-width: 90%; 
     border: 1px solid rgba(255,255,255,0.1); 
     border-radius: 24px; 
@@ -193,7 +198,7 @@ canvas { display: block; width: 100%; height: 100%; }
     max-height: 85vh; overflow-y: auto;
     color: #eee;
 }
-.modal.large-modal { width: 950px; } /* 너비 조금 더 확보 */
+.modal.large-modal { width: 950px; } 
 .modal.active { display: block; animation: popUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
 
 @keyframes popUp { from { transform: scale(0.9) translateY(10px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
@@ -201,7 +206,7 @@ canvas { display: block; width: 100%; height: 100%; }
 .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
 .modal-header h2 { 
     margin: 0; font-size: 26px; color: #fff; 
-    font-family: 'Galmuri11', sans-serif; /* 제목은 픽셀 폰트 */
+    font-family: 'Galmuri11', sans-serif; 
     font-weight: bold;
     border-left: 4px solid #3498db; padding-left: 15px; 
     letter-spacing: -0.5px;
@@ -249,9 +254,8 @@ canvas { display: block; width: 100%; height: 100%; }
 .career-list .content strong { display: block; font-size: 17px; margin-bottom: 8px; color: #eee; font-weight: 700; }
 .career-list .content p { font-size: 14px; color: #aaa; margin: 4px 0; }
 
-/* 2단 프로젝트 레이아웃 */
 .project-layout { display: flex; gap: 40px; }
-.visual-side { flex: 1.4; } /* 비율 조정 */
+.visual-side { flex: 1.4; } 
 .info-side { flex: 1; display: flex; flex-direction: column; gap: 20px; }
 
 @media (max-width: 900px) {
@@ -269,19 +273,33 @@ canvas { display: block; width: 100%; height: 100%; }
     border: 1px solid rgba(255,255,255,0.05);
     position: relative;
 }
-/* 이미지 내부 텍스트도 픽셀폰트로 */
-.img-placeholder.main { width: 100%; height: 100%; font-size: 16px; color: #666; font-family: 'Galmuri11', sans-serif; }
+.img-placeholder.main { 
+    width: 100%; height: 100%; font-size: 16px; color: #666; 
+    font-family: 'Galmuri11', sans-serif; 
+}
 
-.project-gallery { display: flex; gap: 12px; overflow-x: auto; padding: 5px 2px 15px 2px; }
+.project-gallery { 
+    display: flex; 
+    gap: 12px; 
+    overflow-x: auto; 
+    padding: 5px 2px 15px 2px; 
+}
 .img-placeholder { 
     background: #252525; color: #666; display: flex; justify-content: center; align-items: center; 
     text-align: center; border-radius: 12px; transition: all 0.2s; font-family: 'Galmuri11', sans-serif; font-size: 12px;
 }
 .img-placeholder.sub { 
     width: 90px; height: 70px; flex-shrink: 0; 
-    border: 2px solid #333; cursor: pointer; 
+    border: 2px solid #333; 
+    cursor: pointer; 
+    position: relative;
+    z-index: 10;
 }
-.img-placeholder.sub:hover { border-color: #fff; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+.img-placeholder.sub:hover { 
+    border-color: #fff; 
+    transform: translateY(-3px); 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5); 
+}
 
 .project-tags { display: flex; flex-wrap: wrap; gap: 8px; }
 .tag { padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; color: #fff; background: #333; font-family: 'Galmuri11', sans-serif; letter-spacing: -0.5px; }
@@ -324,10 +342,12 @@ canvas { display: block; width: 100%; height: 100%; }
     font-family: 'Galmuri11', sans-serif;
 }
 .link-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.4); }
+
 .link-btn.github { background: #24292e; color: white; border: 1px solid #444; }
 .link-btn.notion { background: #fff; color: #000; border: 1px solid #ccc; }
+.link-btn.figma { background-color: #a259ff; color: white; border: 1px solid #8f44ff; }
+.link-btn.youtube { background-color: #ff0000; color: white; border: 1px solid #cc0000; }
 
-/* 스크롤바 커스텀 */
 .modal::-webkit-scrollbar { width: 6px; }
 .modal::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
 .modal::-webkit-scrollbar-track { background: transparent; }
