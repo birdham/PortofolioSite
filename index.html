@@ -2,17 +2,29 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>My Game Portfolio</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+    <!-- 0. 로딩 화면 (이미지 로드 대기) -->
+    <div id="loading-screen">
+        <div class="spinner"></div>
+        <p>LOADING ASSETS...</p>
+    </div>
+
+    <!-- 배경 음악 오디오 태그 -->
+    <audio id="bgm-audio" loop>
+        <source src="assets/bgm.mp3" type="audio/mp3">
+    </audio>
 
     <div id="game-container">
         <canvas id="gameCanvas"></canvas>
 
         <div id="interaction-layer">
             <div id="world-space">
+                <!-- 위치(left, bottom)는 script.js에서 제어합니다. -->
                 <div class="click-zone" id="zone-computer" onclick="openModal('modal-team-project')">
                     <span class="tooltip">팀 프로젝트 (Click!)</span>
                 </div>
@@ -23,7 +35,7 @@
                     <span class="tooltip">기획서 (Click!)</span>
                 </div>
                 <div class="click-zone" id="zone-arcade" onclick="openModal('modal-web')">
-                    <span class="tooltip">웹 토이프로젝트 (Click!)</span>
+                    <span class="tooltip">팀 프로젝트 2 (Click!)</span>
                 </div>
             </div>
         </div>
@@ -37,85 +49,117 @@
                     <span class="key wide">SPACE</span> <span>점프</span>
                 </div>
             </div>
-            <button id="btn-profile" onclick="openModal('modal-profile')">
-                내 정보 (Stats)
-            </button>
+            
+            <!-- 우측 상단 버튼 그룹 -->
+            <div class="ui-right-group">
+                <button id="btn-music" onclick="toggleMusic()">
+                    🔇 BGM OFF
+                </button>
+                <button id="btn-profile" onclick="openModal('modal-profile')">
+                    내 정보 (Stats)
+                </button>
+            </div>
+        </div>
+
+        <!-- 모바일 컨트롤러 (화면 작을 때만 표시) -->
+        <div id="mobile-controls">
+            <div class="d-pad">
+                <button id="btn-left" class="control-btn">◀</button>
+                <button id="btn-right" class="control-btn">▶</button>
+            </div>
+            <div class="action-pad">
+                <button id="btn-jump" class="control-btn">JUMP</button>
+            </div>
         </div>
     </div>
 
     <!-- 팝업 모달 컨테이너 -->
     <div id="modal-overlay">
         
-        <!-- [내 정보 모달] -->
+        <!-- [내 정보 모달] ★ 내용 갱신됨 -->
         <div id="modal-profile" class="modal large-modal">
             <div class="modal-header"><h2>PLAYER STATUS</h2><button class="close-btn" onclick="closeModal('modal-profile')">✕</button></div>
             <div class="modal-body rpg-style">
                 <div class="profile-container">
                     <div class="profile-left">
                         <div class="profile-img-box">
-                            <div class="img-placeholder round">[사진]</div>
+                            <!-- ★ 프로필 이미지 링크: assets/profile.jpg 파일을 넣어주세요 -->
+                            <img src="assets/profile.jpg" onerror="this.src='https://placehold.co/130x130/333/ccc?text=No+Image'" alt="프로필 사진" class="img-placeholder round" style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
                         <div class="basic-info">
-                            <h3>개발자 OOO</h3>
-                            <p class="job-class">Lv.99 Hybrid Developer</p>
-                            <p class="email">📧 email@example.com</p>
+                            <h3>함지운</h3>
+                            <p class="job-class">Lv.58 Hybrid Developer</p>
+                            <p class="email">📧 joonham1214@gmail.com</p>
                         </div>
                     </div>
                     <div class="profile-right">
+                        <!-- ★ [수정] 텍스트가 길어져서 줄바꿈 되는 것을 방지하기 위해 width를 145px로 늘렸습니다. -->
+                        <!-- STR: Unity / C# -->
                         <div class="stat-row">
-                            <span class="stat-name">STR (Unity)</span>
+                            <span class="stat-name" style="width: 145px;">STR (Unity/C#)</span>
                             <div class="skill-bar-container"><div class="skill-bar-fill" style="width: 85%; background: #e74c3c;"></div></div>
                             <span class="stat-val">85%</span>
                         </div>
+                        <!-- DEX: HTML / CSS / JS -->
                         <div class="stat-row">
-                            <span class="stat-name">DEX (Web)</span>
+                            <span class="stat-name" style="width: 145px;">DEX (Web/JS)</span>
                             <div class="skill-bar-container"><div class="skill-bar-fill" style="width: 65%; background: #2ecc71;"></div></div>
                             <span class="stat-val">65%</span>
                         </div>
+                        <!-- INT: Plan -->
                         <div class="stat-row">
-                            <span class="stat-name">INT (Plan)</span>
+                            <span class="stat-name" style="width: 145px;">INT (Plan)</span>
                             <div class="skill-bar-container"><div class="skill-bar-fill" style="width: 75%; background: #3498db;"></div></div>
                             <span class="stat-val">75%</span>
+                        </div>
+                        <!-- ART: Photoshop -->
+                        <div class="stat-row">
+                            <span class="stat-name" style="width: 145px;">ART (Photoshop)</span>
+                            <div class="skill-bar-container"><div class="skill-bar-fill" style="width: 80%; background: #9b59b6;"></div></div>
+                            <span class="stat-val">80%</span>
                         </div>
                     </div>
                 </div>
                 <hr class="rpg-divider">
                 <div class="profile-section">
                     <h3 class="section-title">📜 CHARACTER BIO</h3>
-                    <p class="bio-text">"상상을 현실로 구현하는 것을 즐기는 개발자입니다."</p>
+                    <p class="bio-text">
+                        "안녕하세요, 아이디어를 현실로 구현하는 즐거움을 아는 지원자 함지운입니다.<br><br>
+                        어릴 적부터 무언가를 창조하는 것에 매료되어 개발 기술과 기획력을 함께 길러왔습니다. 부트캠프와 스터디를 통해 배운 지식을 바탕으로, 단순히 만드는 것을 넘어 사용자에게 새로운 경험을 제공하는 창의적인 개발자(또는 기획자)가 되고 싶습니다."
+                    </p>
                 </div>
                 <hr class="rpg-divider">
                 <div class="profile-section">
                     <h3 class="section-title">🛡️ ADVENTURE LOG (Career)</h3>
                     <ul class="career-list">
                         <li>
-                            <span class="period">2023.06 - 2023.08</span>
-                            <div class="content"><strong>OOO 게임즈 (인턴)</strong><p>- 유니티 프리팹 관리 및 최적화</p></div>
+                            <span class="period">2024.03 - 2024.09</span>
+                            <div class="content"><strong>내일배움캠프 부트캠프</strong><p>- 유니티 개발 공부 및 협업 프로젝트</p></div>
                         </li>
                         <li>
-                            <span class="period">2022.03 - 2022.12</span>
-                            <div class="content"><strong>대학교 게임제작 동아리</strong><p>- 졸업 작품 메인 프로그래밍</p></div>
+                            <!-- ★ [수정] 기간 변경됨 -->
+                            <span class="period">2024.10 - 2025.01</span>
+                            <div class="content"><strong>품게임즈 오토캣 (인턴)</strong><p>- 게임 에셋 개발 및 캐릭터 기획</p></div>
                         </li>
                     </ul>
                 </div>
             </div>
         </div>
 
-        <!-- [1. 팀 프로젝트 모달 - 수정됨: 이미지로 변경] -->
+        <!-- [1. 팀 프로젝트 모달 (Pixel Adventure)] -->
         <div id="modal-team-project" class="modal large-modal">
             <div class="modal-header"><h2>Pixel Adventure</h2><button class="close-btn" onclick="closeModal('modal-team-project')">✕</button></div>
             <div class="modal-body">
                 <div class="project-layout">
                     <div class="visual-side">
                         <div class="project-showcase">
-                            <!-- ★ 이미지를 기본으로 보여줌 -->
                             <img src="assets/pixel_adventure/main.png" class="img-placeholder main" alt="메인 화면" style="object-fit: contain;">
                         </div>
                         
                         <div class="project-gallery">
                             <img src="assets/pixel_adventure/main.png" class="img-placeholder sub" onclick="viewImage(this)" alt="메인">
                             <img src="assets/pixel_adventure/boss.png" class="img-placeholder sub" onclick="viewImage(this)" alt="보스전">
-                            <img src="assets/pixel_adventure/character.png" class="img-placeholder sub" onclick="viewImage(this)" alt="캐릭터 선택창">
+                            <img src="assets/pixel_adventure/character.png" class="img-placeholder sub" onclick="viewImage(this)" alt="캐릭터">
                             <img src="assets/pixel_adventure/fight.png" class="img-placeholder sub" onclick="viewImage(this)" alt="전투">
                         </div>
                     </div>
@@ -140,44 +184,55 @@
                         </div>
 
                         <div class="project-links">
-                            <a href="https://www.figma.com/" target="_blank" class="link-btn figma">Figma</a>
-                            <a href="https://github.com/" target="_blank" class="link-btn github">Github</a>
-                            <a href="https://www.youtube.com/" target="_blank" class="link-btn youtube">Youtube</a>
+                            <a href="https://www.figma.com/board/5Kc2KsLWkpB9l4TCCYY5iL/%EC%9C%A1%ED%95%98%EC%9B%90%EC%B9%99-figma?node-id=0-1&p=f" target="_blank" class="link-btn figma">Figma</a>
+                            <a href="https://github.com/NFUE2/Project_6" target="_blank" class="link-btn github">Github</a>
+                            <a href="https://www.youtube.com/watch?v=iOQOjorD1AA&t=2s" target="_blank" class="link-btn youtube">Youtube</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- [2. 게임 아트 모달] -->
+        <!-- [2. 게임 아트 모달 (AutoCat)] -->
         <div id="modal-art" class="modal large-modal">
-            <div class="modal-header"><h2>Pixel Art & Concept</h2><button class="close-btn" onclick="closeModal('modal-art')">✕</button></div>
+            <div class="modal-header"><h2>AutoCat 게임아트</h2><button class="close-btn" onclick="closeModal('modal-art')">✕</button></div>
             <div class="modal-body">
-                <div class="project-layout">
+                <div class="project-layout mobile-focus">
                     <div class="visual-side">
-                        <div class="project-showcase">
-                            <div class="img-placeholder main">대표 아트워크</div>
+                        <div class="project-showcase mobile-frame">
+                            <img src="assets/autocat/main.png" class="img-placeholder main mobile-main" alt="AutoCat 메인">
                         </div>
                         <div class="project-gallery">
-                            <div class="img-placeholder sub" onclick="viewImage(this)">대표 아트워크</div>
-                            <div class="img-placeholder sub" onclick="viewImage(this)">Idle 모션</div>
-                            <div class="img-placeholder sub" onclick="viewImage(this)">Run 모션</div>
+                            <img src="assets/autocat/main.png" class="img-placeholder sub mobile" onclick="viewImage(this)" alt="메인">
+                            <img src="assets/autocat/page_1.png" class="img-placeholder sub mobile" onclick="viewImage(this)" alt="페이지 1">
+                            <img src="assets/autocat/page_2.png" class="img-placeholder sub mobile" onclick="viewImage(this)" alt="페이지 2">
+                            <img src="assets/autocat/page_3.png" class="img-placeholder sub mobile" onclick="viewImage(this)" alt="페이지 3">
+                            <img src="assets/autocat/page_4.png" class="img-placeholder sub mobile" onclick="viewImage(this)" alt="페이지 4">
                         </div>
                     </div>
                     <div class="info-side">
                         <div class="project-tags">
-                            <span class="tag tech">#Aseprite</span>
-                            <span class="tag role">#픽셀아트</span>
-                            <span class="tag role">#캐릭터기획</span>
+                            <span class="tag tech">#Photoshop</span>
+                            <span class="tag feature">#멀티플레이</span>
+                            <span class="tag role">#기획</span>
+                            <span class="tag role">#디자인</span>
                         </div>
-                        <div class="project-desc"><p>직접 캐릭터 컨셉을 기획하고 제작한 2D 에셋입니다.</p></div>
-                        <div class="project-links"><a href="#" target="_blank" class="link-btn notion">ArtStation</a></div>
+                        <div class="project-desc">
+                            <p><strong>AutoCat</strong>은 품게임즈라는 회사에서 만든 <strong>오토형 디펜스 PvP 모바일 게임</strong>으로, 
+                            현재 출시된 상태입니다.<br><br>
+                            해당 프로젝트에서 저는 <strong>게임아트와 UI 디자인</strong>, 그리고 <strong>캐릭터 구상 및 기획</strong>을 맡았습니다.</p>
+                        </div>
+                        <div class="project-meta-grid">
+                            <div class="meta-box"><span class="label">👥 인원</span><span class="value">3인</span></div>
+                            <div class="meta-box"><span class="label">📅 기간</span><span class="value">3개월</span></div>
+                            <div class="meta-box full"><span class="label">🛠️ 도구</span><span class="value">Photoshop</span></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- [3. 기획서 모달] -->
+        <!-- [3. 기획서 모달 (BackpackBrawl)] -->
         <div id="modal-design" class="modal large-modal">
             <div class="modal-header"><h2>BackpackBrawl 역기획 및 분석 제안서</h2><button class="close-btn" onclick="closeModal('modal-design')">✕</button></div>
             <div class="modal-body">
@@ -209,32 +264,48 @@
                         </div>
                         
                         <div class="project-links">
-                            <a href="https://www.notion.so/teamsparta/1232dc3ef51481a7ba1cd27d75e3d1c0?v=1232dc3ef51481028552000c61248ad0" target="_blank" class="link-btn notion">Notion</a>
+                            <a href="https://www.notion.so/teamsparta/2b72dc3ef514812f8b17dd1b65b4f265" target="_blank" class="link-btn notion">Notion</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- [4. 웹 프로젝트 모달] -->
+        <!-- [4. 웹 프로젝트 모달 -> Brick Break] -->
         <div id="modal-web" class="modal large-modal">
-            <div class="modal-header"><h2>Web Mini Games</h2><button class="close-btn" onclick="closeModal('modal-web')">✕</button></div>
+            <div class="modal-header"><h2>Brick Break</h2><button class="close-btn" onclick="closeModal('modal-web')">✕</button></div>
             <div class="modal-body">
-                <div class="project-layout">
+                <div class="project-layout mobile-focus">
                     <div class="visual-side">
-                        <div class="project-showcase"><div class="img-placeholder main">웹게임 실행 화면</div></div>
+                        <div class="project-showcase mobile-frame">
+                            <img src="assets/brick_break/title.gif" class="img-placeholder main mobile-main" alt="Brick Break 실행 화면">
+                        </div>
                         <div class="project-gallery">
-                            <div class="img-placeholder sub" onclick="viewImage(this)">웹게임 실행 화면</div>
-                            <div class="img-placeholder sub" onclick="viewImage(this)">테트리스</div>
+                            <img src="assets/brick_break/title.gif" class="img-placeholder sub mobile" onclick="viewImage(this)" alt="타이틀">
+                            <img src="assets/brick_break/main.png" class="img-placeholder sub mobile" onclick="viewImage(this)" alt="메인">
+                            <img src="assets/brick_break/stageclear.png" class="img-placeholder sub mobile" onclick="viewImage(this)" alt="클리어">
+                            <img src="assets/brick_break/gameover.png" class="img-placeholder sub mobile" onclick="viewImage(this)" alt="게임오버">
                         </div>
                     </div>
                     <div class="info-side">
                         <div class="project-tags">
-                            <span class="tag tech">#JS</span>
-                            <span class="tag feature">#Canvas</span>
+                            <span class="tag tech">#Unity</span>
+                            <span class="tag role">#개발</span>
+                            <span class="tag role">#기획</span>
                         </div>
-                        <div class="project-desc"><p>바닐라 JS와 Canvas API로 구현한 미니 게임입니다.</p></div>
-                        <div class="project-links"><a href="#" target="_blank" class="link-btn github">GitHub</a></div>
+                        <div class="project-desc">
+                            <p><strong>패들로 공을 튀겨서 블럭을 깨는</strong> 고전적인 재미의 블럭깨기 게임입니다.<br><br>
+                            해당 프로젝트에서 저는 <strong>UI와 디자인</strong>, 그리고 <strong>벽돌 파괴 로직 구현</strong>을 담당했습니다.</p>
+                        </div>
+                        <div class="project-meta-grid">
+                            <div class="meta-box"><span class="label">👥 인원</span><span class="value">4인</span></div>
+                            <div class="meta-box"><span class="label">📅 기간</span><span class="value">7일</span></div>
+                            <div class="meta-box full"><span class="label">🛠️ 도구</span><span class="value">Unity, C#, Notion, Figma</span></div>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://www.figma.com/board/y8no9Nq0mEebUDvSHcTVcr/%EC%82%AC%ED%9A%8C%EC%8B%A4%ED%97%98%EC%A1%B0?node-id=0-1&p=f&t=5BwgNelLSM4Qy1Cg-0" target="_blank" class="link-btn figma">Figma</a>
+                            <a href="https://github.com/Be-bell/BrickBreak2D?tab=readme-ov-file" target="_blank" class="link-btn github">GitHub</a>
+                        </div>
                     </div>
                 </div>
             </div>

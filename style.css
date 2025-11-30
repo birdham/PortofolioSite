@@ -1,15 +1,33 @@
-/* ★ [1] 폰트 불러오기 */
+/* (기존 폰트 등 유지) */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
 @import url('https://cdn.jsdelivr.net/npm/galmuri/dist/galmuri.css');
 
-/* 기본 설정 */
 body {
     background-color: #000;
     color: white;
     font-family: 'Noto Sans KR', sans-serif;
     margin: 0;
-    overflow: hidden;
+    overflow: hidden; /* 스크롤 방지 */
+    touch-action: none; /* 모바일에서 더블탭 줌 등 기본 동작 방지 */
 }
+
+/* ★ [NEW] 로딩 화면 */
+#loading-screen {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: #111; z-index: 9999;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    color: #fff; font-family: 'Galmuri11', sans-serif;
+    transition: opacity 0.5s ease;
+}
+.spinner {
+    width: 40px; height: 40px;
+    border: 4px solid rgba(255,255,255,0.1);
+    border-top: 4px solid #ffff00;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
 #game-container {
     position: relative;
@@ -23,28 +41,39 @@ body {
     overflow: hidden;
 }
 
+#game-container::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: radial-gradient(circle, transparent 50%, rgba(0,0,0,0.8) 100%);
+    pointer-events: none;
+    z-index: 50;
+}
+
 canvas { display: block; width: 100%; height: 100%; }
 
 #interaction-layer {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     pointer-events: none;
+    z-index: 10;
 }
 
 #world-space {
     position: absolute; top: 0; left: 0;
-    width: 3000px;
+    width: 3000px; /* JS에서 WORLD_WIDTH와 동일하게 유지 */
     height: 100%;
+    transform-origin: 0 0;
 }
 
-/* ★ [수정됨] 강렬한 형광 노랑 발광 애니메이션 */
 @keyframes zonePulse {
     0% {
-        border-color: rgba(255, 255, 0, 0.3); /* 흐린 노랑 */
+        border-color: rgba(255, 255, 0, 0.3);
         box-shadow: 0 0 0 rgba(255, 255, 0, 0);
         transform: scale(1);
     }
     50% {
-        border-color: rgba(255, 255, 0, 1);   /* 쨍한 노랑 */
+        border-color: rgba(255, 255, 0, 1);
         box-shadow: 0 0 20px rgba(255, 255, 0, 0.6), inset 0 0 10px rgba(255, 255, 0, 0.2); 
         transform: scale(1.02); 
     }
@@ -57,16 +86,17 @@ canvas { display: block; width: 100%; height: 100%; }
 
 .click-zone {
     position: absolute;
-    background: rgba(255, 255, 0, 0.05); /* 아주 연한 노랑 배경 */
+    /* width, height, left, bottom은 이제 JS에서 설정합니다 */
+    width: 128px; height: 128px; 
+    background: rgba(255, 255, 0, 0.05);
     cursor: pointer;
     pointer-events: auto;
-    border: 3px dashed rgba(255, 255, 0, 0.5); /* 테두리도 노랑 */
+    border: 3px dashed rgba(255, 255, 0, 0.5);
     border-radius: 12px;
     transition: all 0.2s ease;
     animation: zonePulse 1.5s infinite ease-in-out; 
 }
 
-/* 마우스 올렸을 때 효과 강화 */
 .click-zone:hover { 
     background: rgba(255, 255, 0, 0.2); 
     animation: none; 
@@ -80,14 +110,14 @@ canvas { display: block; width: 100%; height: 100%; }
     display: none; position: absolute; top: -50px; left: 50%;
     transform: translateX(-50%); 
     background: rgba(20, 20, 20, 0.95);
-    color: #ffff00; /* 텍스트도 형광 노랑 */
+    color: #ffff00;
     padding: 8px 16px; 
     font-size: 13px;
     font-family: 'Galmuri11', sans-serif; 
     font-weight: bold;
     white-space: nowrap; 
     border-radius: 8px;
-    border: 1px solid #ffff00; /* 테두리도 노랑 */
+    border: 1px solid #ffff00;
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     pointer-events: none;
     z-index: 100;
@@ -96,12 +126,6 @@ canvas { display: block; width: 100%; height: 100%; }
 
 @keyframes floatUp { from { transform: translate(-50%, 10px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
 
-#zone-computer { bottom: 100px; left: 300px; width: 120px; height: 100px; }
-#zone-easel { bottom: 100px; left: 900px; width: 100px; height: 140px; }
-#zone-bookshelf { bottom: 100px; left: 1600px; width: 150px; height: 180px; }
-#zone-arcade { bottom: 100px; left: 2300px; width: 100px; height: 120px; }
-
-/* UI 레이어 */
 #ui-layer { 
     position: absolute; 
     top: 30px; left: 0; 
@@ -115,6 +139,43 @@ canvas { display: block; width: 100%; height: 100%; }
     z-index: 100;
 }
 #ui-layer > * { pointer-events: auto; }
+
+/* ★ [NEW] 우측 상단 버튼 그룹 */
+.ui-right-group {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+/* ★ [NEW] 모바일 컨트롤러 */
+#mobile-controls {
+    display: none; /* 데스크탑 기본 숨김 */
+    position: absolute; bottom: 30px; left: 0; width: 100%;
+    padding: 0 20px; box-sizing: border-box;
+    pointer-events: none; z-index: 110;
+    justify-content: space-between;
+}
+.control-btn {
+    width: 60px; height: 60px;
+    background: rgba(255,255,255,0.15);
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    color: #fff; font-weight: bold; font-family: 'Galmuri11';
+    backdrop-filter: blur(5px);
+    pointer-events: auto;
+    touch-action: manipulation;
+    user-select: none;
+}
+.control-btn:active { background: rgba(255,255,255,0.4); transform: scale(0.95); }
+.d-pad { display: flex; gap: 20px; pointer-events: auto; }
+.action-pad { pointer-events: auto; }
+
+/* 900px 이하(태블릿/모바일)에서 컨트롤러 표시 & 힌트 숨김 */
+@media (max-width: 900px) {
+    #mobile-controls { display: flex; }
+    .controls-hint { display: none; }
+    #ui-layer { padding: 0 20px; } /* 모바일에서 패딩 줄임 */
+}
 
 .controls-hint { 
     background: rgba(0, 0, 0, 0.6); 
@@ -158,7 +219,7 @@ canvas { display: block; width: 100%; height: 100%; }
 .key:active { top: 0; box-shadow: 0 0 0 #999; }
 .key.wide { padding: 0 10px; min-width: auto; }
 
-#btn-profile { 
+#btn-profile, #btn-music { 
     background: linear-gradient(135deg, #333, #111); 
     color: #fff;
     border: 1px solid #555; 
@@ -170,15 +231,27 @@ canvas { display: block; width: 100%; height: 100%; }
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     transition: all 0.2s;
     letter-spacing: 0.5px;
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
 }
-#btn-profile:hover { 
+#btn-profile:hover, #btn-music:hover { 
     transform: translateY(-2px); 
     border-color: #fff; 
     box-shadow: 0 6px 20px rgba(255,255,255,0.1); 
     background: linear-gradient(135deg, #444, #222);
 }
 
-/* 모달 스타일 */
+/* ★ [NEW] 음악 버튼 스타일 */
+#btn-music {
+    padding: 12px 20px; /* 아이콘+텍스트라 약간 조절 */
+    color: #aaa; /* 꺼져있을 땐 약간 어둡게 */
+}
+#btn-music.on {
+    color: #ffff00; /* 켜지면 형광색 */
+    border-color: #ffff00;
+    box-shadow: 0 0 15px rgba(255, 255, 0, 0.3);
+}
+
+/* 모달 관련 스타일은 그대로 유지 */
 #modal-overlay {
     display: none; position: fixed; top: 0; left: 0;
     width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8);
@@ -214,7 +287,6 @@ canvas { display: block; width: 100%; height: 100%; }
 .close-btn { background: none; color: #666; border: none; font-size: 28px; cursor: pointer; transition: color 0.2s; line-height: 1; }
 .close-btn:hover { color: #e74c3c; }
 
-/* 프로필 스타일 */
 .profile-container { display: flex; gap: 50px; margin-bottom: 35px; align-items: center; justify-content: center; padding: 0 10px; }
 .profile-left { display: flex; flex-direction: column; align-items: center; gap: 15px; flex: 0 0 auto; text-align: center; }
 .profile-img-box { 
@@ -258,11 +330,20 @@ canvas { display: block; width: 100%; height: 100%; }
 .visual-side { flex: 1.4; } 
 .info-side { flex: 1; display: flex; flex-direction: column; gap: 20px; }
 
+.project-layout.mobile-focus { gap: 50px; }
+.project-layout.mobile-focus .visual-side {
+    flex: 0 0 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.project-layout.mobile-focus .info-side { flex: 1; }
+
 @media (max-width: 900px) {
-    .project-layout { flex-direction: column; gap: 30px; }
+    .project-layout, .project-layout.mobile-focus { flex-direction: column; gap: 30px; }
     .modal.large-modal { width: 95%; padding: 25px; }
     .project-showcase { height: 220px; }
-    .profile-container { flex-direction: column; gap: 30px; }
+    .project-layout.mobile-focus .visual-side { flex: auto; width: 100%; align-items: center; }
 }
 
 .project-showcase { 
@@ -273,16 +354,29 @@ canvas { display: block; width: 100%; height: 100%; }
     border: 1px solid rgba(255,255,255,0.05);
     position: relative;
 }
+
+.project-showcase.mobile-frame {
+    width: 230px; 
+    height: 380px; 
+    border-radius: 20px;
+    border: 6px solid #333;
+    background: #000;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(255,255,255,0.1);
+}
+
 .img-placeholder.main { 
     width: 100%; height: 100%; font-size: 16px; color: #666; 
-    font-family: 'Galmuri11', sans-serif; 
+    font-family: 'Galmuri11', sans-serif; display: flex; justify-content: center; align-items: center;
 }
+.img-placeholder.main.mobile-main { object-fit: cover; }
 
 .project-gallery { 
     display: flex; 
     gap: 12px; 
     overflow-x: auto; 
     padding: 5px 2px 15px 2px; 
+    justify-content: center;
+    width: 100%;
 }
 .img-placeholder { 
     background: #252525; color: #666; display: flex; justify-content: center; align-items: center; 
@@ -295,6 +389,11 @@ canvas { display: block; width: 100%; height: 100%; }
     position: relative;
     z-index: 10;
 }
+.img-placeholder.sub.mobile {
+    width: 50px; height: 85px;
+    object-fit: cover;
+}
+
 .img-placeholder.sub:hover { 
     border-color: #fff; 
     transform: translateY(-3px); 
